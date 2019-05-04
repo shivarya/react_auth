@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FormFields from '../widgets/forms/form_feilds';
+import {firebaseDB} from "../firebase_main";
 
 class User extends Component {
 
@@ -67,8 +68,8 @@ class User extends Component {
                     name:'age_input',
                     options:[
                         {val:1,text:'10-20'},
-                        {val:1,text:'20-30'},
-                        {val:1,text:'+30'}
+                        {val:2,text:'20-30'},
+                        {val:3,text:'+30'}
                     ]
                 },
                 validation:{
@@ -99,7 +100,13 @@ class User extends Component {
             formIsValid = this.state.formData[key].valid && formIsValid;
         }
         if(formIsValid){
-            console.log(data);      
+            firebaseDB.ref('users').push(data)
+            .then(() => {
+                console.log("new users added");                
+            })
+            .catch((err) => {
+                console.log(err);                
+            })    
         }else{
             console.error(data);
         }
